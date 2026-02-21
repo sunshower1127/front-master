@@ -37,6 +37,8 @@
 		"@vitest/coverage-v8": "^4.0.18",
 		"eslint": "^9.39.2",
 		"eslint-config-prettier": "^10.1.8",
+		"eslint-import-resolver-typescript": "^4.4.4",
+		"eslint-plugin-boundaries": "^5.4.0",
 		"eslint-plugin-storybook": "^10.2.10",
 		"eslint-plugin-svelte": "^3.14.0",
 		"globals": "^17.3.0",

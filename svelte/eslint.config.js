@@ -5,6 +5,7 @@ import prettier from 'eslint-config-prettier';
 import path from 'node:path';
 import { includeIgnoreFile } from '@eslint/compat';
 import js from '@eslint/js';
+import boundaries from 'eslint-plugin-boundaries';
 import svelte from 'eslint-plugin-svelte';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
@@ -37,6 +38,38 @@ export default defineConfig(
 				parser: ts.parser,
 				svelteConfig
 			}
+		}
+	},
+	// FSD layer boundary rules
+	{
+		files: ['src/**/*.{ts,js,svelte}'],
+		plugins: { boundaries },
+		settings: {
+			'boundaries/elements': [
+				{ type: 'shared', pattern: ['src/lib/shared/*'], mode: 'folder' },
+				{ type: 'entities', pattern: ['src/lib/entities/*'], mode: 'folder' },
+				{ type: 'features', pattern: ['src/lib/features/*'], mode: 'folder' },
+				{ type: 'widgets', pattern: ['src/lib/widgets/*'], mode: 'folder' },
+				{ type: 'routes', pattern: ['src/routes/*'], mode: 'folder' }
+			],
+			'import/resolver': {
+				typescript: { alwaysTryTypes: true }
+			}
+		},
+		rules: {
+			'boundaries/element-types': [
+				'error',
+				{
+					default: 'disallow',
+					rules: [
+						{ from: 'shared', allow: ['shared'] },
+						{ from: 'entities', allow: ['shared', 'entities'] },
+						{ from: 'features', allow: ['shared', 'entities'] },
+						{ from: 'widgets', allow: ['shared', 'entities', 'features', 'widgets'] },
+						{ from: 'routes', allow: ['shared', 'entities', 'features', 'widgets'] }
+					]
+				}
+			]
 		}
 	}
 );
